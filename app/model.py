@@ -21,7 +21,9 @@ class Board:
         print("X" * (self.width + 2))
 
     def _make_board(self):
-        board = [[Empty(i, j) for i in range(self.width)] for j in range(self.height)]
+        board = [
+            [EmptyCell(i, j) for i in range(self.width)] for j in range(self.height)
+        ]
         for snake in self.snakes:
             for part in snake.body:
                 board[part.y][part.x] = part
@@ -60,7 +62,7 @@ class Food:
         return "o"
 
 
-class Empty:
+class EmptyCell:
     def __init__(self, x, y):
         self.x = x
         self.y = y
