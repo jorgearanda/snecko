@@ -2,13 +2,13 @@ class Game:
     def __init__(self, game_data):
         self.turn = game_data["turn"]
         self.you = Snake(game_data["you"])
-        self.board = Board(game_data["board"])
+        self.board = Board(game_data["board"], game_data["you"]["id"])
         self.game = game_data["game"]
 
 
 class Board:
-    def __init__(self, board_data):
-        self.snakes = [Snake(s) for s in board_data["snakes"]]
+    def __init__(self, board_data, you_id):
+        self.snakes = [Snake(s, you_id) for s in board_data["snakes"]]
         self.food = [Food(f["x"], f["y"]) for f in board_data["food"]]
         self.width = board_data["width"]
         self.height = board_data["height"]
@@ -34,7 +34,8 @@ class Board:
 
 
 class Snake:
-    def __init__(self, snake_data):
+    def __init__(self, snake_data, you_id):
+        self.you = you_id == snake_data["id"]
         self.id = snake_data["id"]
         self.name = snake_data["name"]
         self.body = [
