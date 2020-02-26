@@ -1,7 +1,7 @@
 class Game:
     def __init__(self, game_data):
         self.turn = game_data["turn"]
-        self.you = Snake(game_data["you"])
+        self.you = Snake(game_data["you"], game_data["you"]["id"])
         self.board = Board(game_data["board"], game_data["you"]["id"])
         self.game = game_data["game"]
 
@@ -30,6 +30,25 @@ class Board:
         for food in self.food:
             board[food.y][food.x] = food
 
+        for j in range(self.height):
+            for i in range(self.width):
+                if j == 0:
+                    board[j][i].next["up"] = Wall(i, j - 1)
+                else:
+                    board[j][i].next["up"] = board[j - 1][i]
+                if j == self.height - 1:
+                    board[j][i].next["down"] = Wall(i, j + 1)
+                else:
+                    board[j][i].next["down"] = board[j + 1][i]
+                if i == 0:
+                    board[j][i].next["left"] = Wall(i - 1, j)
+                else:
+                    board[j][i].next["left"] = board[j][i - 1]
+                if i == self.width - 1:
+                    board[j][i].next["right"] = Wall(i + 1, j)
+                else:
+                    board[j][i].next["right"] = board[j][i + 1]
+
         return board
 
 
@@ -39,7 +58,7 @@ class Snake:
         self.id = snake_data["id"]
         self.name = snake_data["name"]
         self.body = [
-            SnakePart(part["x"], part["y"], idx)
+            SnakePart(part["x"], part["y"], idx, self.you)
             for idx, part in enumerate(snake_data["body"])
         ]
         self.health = snake_data["health"]
@@ -50,13 +69,14 @@ class Cell:
         self.x = x
         self.y = y
         self.free = True
+        self.next = {}
 
 
 class SnakePart(Cell):
-    def __init__(self, x, y, idx):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, idx, you):
+        super().__init__(x, y)
         self.idx = idx
+        self.you = you
         self.free = False
 
     @property
@@ -64,7 +84,10 @@ class SnakePart(Cell):
         return self.idx == 0
 
     def __str__(self):
-        return "S" if self.head else "s"
+        if self.you:
+            return "Y" if self.head else "y"
+        else:
+            return "S" if self.head else "s"
 
 
 class Food(Cell):
@@ -79,8 +102,7 @@ class EmptyCell(Cell):
 
 class Wall(Cell):
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        super().__init__(x, y)
         self.free = False
 
     def __str__(self):
