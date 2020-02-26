@@ -9,7 +9,7 @@ class Game:
 class Board:
     def __init__(self, board_data):
         self.snakes = [Snake(s) for s in board_data["snakes"]]
-        self.food = [Food(f) for f in board_data["food"]]
+        self.food = [Food(f["x"], f["y"]) for f in board_data["food"]]
         self.width = board_data["width"]
         self.height = board_data["height"]
         self.board = self._make_board()
@@ -38,34 +38,49 @@ class Snake:
         self.id = snake_data["id"]
         self.name = snake_data["name"]
         self.body = [
-            SnakePart(idx, part) for idx, part in enumerate(snake_data["body"])
+            SnakePart(part["x"], part["y"], idx)
+            for idx, part in enumerate(snake_data["body"])
         ]
         self.health = snake_data["health"]
 
 
-class SnakePart:
-    def __init__(self, idx, snake_part_data):
+class Cell:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.free = True
+
+
+class SnakePart(Cell):
+    def __init__(self, x, y, idx):
+        self.x = x
+        self.y = y
         self.idx = idx
-        self.x = snake_part_data["x"]
-        self.y = snake_part_data["y"]
+        self.free = False
+
+    @property
+    def head(self):
+        return self.idx == 0
 
     def __str__(self):
-        return "S" if self.idx == 0 else "s"
+        return "S" if self.head else "s"
 
 
-class Food:
-    def __init__(self, food_data):
-        self.x = food_data["x"]
-        self.y = food_data["y"]
-
+class Food(Cell):
     def __str__(self):
         return "o"
 
 
-class EmptyCell:
+class EmptyCell(Cell):
+    def __str__(self):
+        return " "
+
+
+class Wall(Cell):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.free = False
 
     def __str__(self):
-        return " "
+        return "X"
