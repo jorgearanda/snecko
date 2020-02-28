@@ -1,9 +1,28 @@
+import random
+
+
 class Game:
     def __init__(self, game_data):
         self.turn = game_data["turn"]
         self.you = Snake(game_data["you"], game_data["you"]["id"])
         self.board = Board(game_data["board"], game_data["you"]["id"])
         self.game = game_data["game"]
+        print(self.board)
+
+    def naive_move(self):
+        choices = []
+        for choice in {"up", "down", "left", "right"}:
+            if self.board.your_head.next(choice).free:
+                choices.append(choice)
+
+        if len(choices) == 0:
+            print("Committing suicide")
+            move = "up"
+        else:
+            move = random.choice(choices)
+            print("Moving {move}")
+
+        return move
 
 
 class Board:
@@ -19,7 +38,6 @@ class Board:
         for row in self.board:
             print("X" + "".join([str(cell) for cell in row]) + "X")
         print("X" * (self.width + 2))
-        print(f"Your head: {self.your_head}")
 
     def _make_board(self):
         board = [
@@ -58,7 +76,7 @@ class Board:
     def _mark_your_head(self):
         for snake in self.snakes:
             if snake.you:
-                self.your_head = (snake.body[0].x, snake.body[0].y)
+                self.your_head = snake.body[0]
                 break
 
 

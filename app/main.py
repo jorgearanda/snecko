@@ -3,7 +3,8 @@ import os
 import random
 import bottle
 
-from api import ping_response, start_response, move_response, end_response
+from app.api import ping_response, start_response, move_response, end_response
+from app.model import Game
 
 
 @bottle.route("/")
@@ -42,11 +43,8 @@ def start():
 @bottle.post("/move")
 def move():
     data = bottle.request.json
-    print(json.dumps(data))
-    directions = ["up", "down", "left", "right"]
-    direction = random.choice(directions)
-
-    return move_response(direction)
+    game = Game(data)
+    return move_response(game.naive_move())
 
 
 @bottle.post("/end")
