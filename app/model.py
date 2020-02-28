@@ -19,8 +19,10 @@ class Game:
                     if further == choice:
                         continue
                     if not self.board.your_head.next[choice].next[further].free:
+                        print(f"{choice} isn't great because {further} is not free")
                         second_choices.append(choice)
                         break
+                print(f"{choice} seems great because all adjacent cells are free")
                 first_choices.append(choice)
 
         if len(first_choices) == 0 and len(second_choices) == 0:
