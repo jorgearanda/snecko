@@ -19,6 +19,19 @@ class Game:
                 for further in {"up", "down", "left", "right"}:
                     if self.board.your_head.next[choice].next[further].free:
                         free += 1
+                    if self.board.your_head.next[choice].next[further].head:
+                        free -= 0.5
+                    if self.board.your_head.next[choice].next[further].food:
+                        if self.you.health < 50:
+                            free += 0.2
+                        else:
+                            free -= 0.2
+            if self.board.your_head.next[choice].food:
+                if self.you.health < 50:
+                    free += 0.4
+                else:
+                    free -= 0.4
+
             choices[choice] = free
 
         print(choices)
@@ -109,6 +122,8 @@ class Cell:
         self.x = x
         self.y = y
         self.free = True
+        self.food = False
+        self.head = False
         self.next = {}
 
 
@@ -118,6 +133,7 @@ class SnakePart(Cell):
         self.idx = idx
         self.you = you
         self.free = False
+        self.head = True
 
     @property
     def head(self):
@@ -131,6 +147,10 @@ class SnakePart(Cell):
 
 
 class Food(Cell):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.food = True
+
     def __str__(self):
         return "o"
 
