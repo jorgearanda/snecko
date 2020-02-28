@@ -3,8 +3,8 @@ import os
 import random
 import bottle
 
-from app.api import ping_response, start_response, move_response, end_response
-from app.model import Game
+from api import ping_response, start_response, move_response, end_response
+from model import Game
 
 
 @bottle.route("/")
