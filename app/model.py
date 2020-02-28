@@ -15,18 +15,19 @@ class Game:
         choices = {}
         for choice in {"up", "down", "left", "right"}:
             free = 0
-            if self.board.your_head.next[choice].free:
+            candidate = self.board.your_head.next[choice]
+            if candidate.free:
                 for further in {"up", "down", "left", "right"}:
-                    if self.board.your_head.next[choice].next[further].free:
+                    if candidate.next[further].free:
                         free += 1
-                    if self.board.your_head.next[choice].next[further].head:
+                    if candidate.next[further].head:
                         free -= 0.5
-                    if self.board.your_head.next[choice].next[further].food:
+                    if candidate.next[further].food:
                         if self.you.health < 50:
                             free += 0.2
                         else:
                             free -= 0.2
-            if self.board.your_head.next[choice].food:
+            if candidate.food:
                 if self.you.health < 50:
                     free += 0.4
                 else:
@@ -133,7 +134,6 @@ class SnakePart(Cell):
         self.idx = idx
         self.you = you
         self.free = False
-        self.head = True
 
     @property
     def head(self):
