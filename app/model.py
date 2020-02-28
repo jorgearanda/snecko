@@ -19,6 +19,7 @@ class Board:
         for row in self.board:
             print("X" + "".join([str(cell) for cell in row]) + "X")
         print("X" * (self.width + 2))
+        print(f"Your head: {self.your_head}")
 
     def _make_board(self):
         board = [
@@ -32,6 +33,7 @@ class Board:
 
         self.board = board
         self._link_cells()
+        self._mark_your_head()
 
     def _link_cells(self):
         for j in range(self.height):
@@ -52,6 +54,12 @@ class Board:
                     self.board[j][i].next["right"] = Wall(i + 1, j)
                 else:
                     self.board[j][i].next["right"] = self.board[j][i + 1]
+
+    def _mark_your_head(self):
+        for snake in self.snakes:
+            if snake.you:
+                self.your_head = (snake.body[0].x, snake.body[0].y)
+                break
 
 
 class Snake:
