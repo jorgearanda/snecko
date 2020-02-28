@@ -12,7 +12,7 @@ class Game:
     def naive_move(self):
         first_choices = []
         second_choices = []
-        choices = []
+        choices = {}
         for choice in {"up", "down", "left", "right"}:
             free = 0
             if self.board.your_head.next[choice].free:
