@@ -32,7 +32,7 @@ class Game:
                 best_choices.append(choice)
 
         move = random.choice(best_choices)
-        print(f"Moving {best_choice} ({best_free} free spaces)")
+        print(f"Moving {move} ({best_free} free spaces)")
 
         return move
 
