@@ -22,16 +22,17 @@ class Game:
             choices[choice] = free
 
         print(choices)
-
-        best_choice = "up"
         best_free = 0
+        best_choices = []
         for choice in choices:
             if choices[choice] > best_free:
-                best_choice = choice
+                best_choices = [choice]
                 best_free = choices[choice]
+            elif choices[choice] == best_free:
+                best_choices.append(choice)
 
-        print(f"Best choice is {best_choice} with {best_free} free spaces")
-        move = best_choice
+        move = random.choice(best_choices)
+        print(f"Moving {best_choice} ({best_free} free spaces)")
 
         return move
 
