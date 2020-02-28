@@ -14,30 +14,24 @@ class Game:
         second_choices = []
         choices = []
         for choice in {"up", "down", "left", "right"}:
+            free = 0
             if self.board.your_head.next[choice].free:
                 for further in {"up", "down", "left", "right"}:
-                    if (
-                        self.board.your_head.next[choice].next[further]
-                        == self.board.your_head
-                    ):
-                        continue
-                    if not self.board.your_head.next[choice].next[further].free:
-                        print(f"{choice} isn't great because {further} is not free")
-                        second_choices.append(choice)
-                        break
-                else:
-                    print(f"{choice} seems great because all adjacent cells are free")
-                    first_choices.append(choice)
+                    if self.board.your_head.next[choice].next[further].free:
+                        free += 1
+            choices[choice] = free
 
-        if len(first_choices) == 0 and len(second_choices) == 0:
-            print("Committing suicide")
-            move = "up"
-        elif len(first_choices) > 0:
-            move = random.choice(first_choices)
-            print(f"Moving to first choice {move}")
-        else:
-            move = random.choice(second_choices)
-            print(f"Moving to second choice {move}")
+        print(choices)
+
+        best_choice = "up"
+        best_free = 0
+        for choice in choices:
+            if choices[choice] > best_free:
+                best_choice = choice
+                best_free = choices[choice]
+
+        print(f"Best choice is {best_choice} with {best_free} free spaces")
+        move = best_choice
 
         return move
 
