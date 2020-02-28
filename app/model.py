@@ -10,17 +10,28 @@ class Game:
         print(self.board)
 
     def naive_move(self):
+        first_choices = []
+        second_choices = []
         choices = []
         for choice in {"up", "down", "left", "right"}:
             if self.board.your_head.next[choice].free:
-                choices.append(choice)
+                for further in {"up", "down", "left", "right"}:
+                    if further == choice:
+                        continue
+                    if not self.board.your_head.next[choice].next[further].free:
+                        second_choices.append(choice)
+                        break
+                first_choices.append(choice)
 
-        if len(choices) == 0:
+        if len(first_choices) == 0 and len(second_choices) == 0:
             print("Committing suicide")
             move = "up"
+        elif len(first_choices) > 0:
+            move = random.choice(first_choices)
+            print(f"Moving to first choice {move}")
         else:
-            move = random.choice(choices)
-            print("Moving {move}")
+            move = random.choice(second_choices)
+            print(f"Moving to second choicde {move}")
 
         return move
 
