@@ -22,8 +22,9 @@ class Game:
                         print(f"{choice} isn't great because {further} is not free")
                         second_choices.append(choice)
                         break
-                print(f"{choice} seems great because all adjacent cells are free")
-                first_choices.append(choice)
+                else:
+                    print(f"{choice} seems great because all adjacent cells are free")
+                    first_choices.append(choice)
 
         if len(first_choices) == 0 and len(second_choices) == 0:
             print("Committing suicide")
