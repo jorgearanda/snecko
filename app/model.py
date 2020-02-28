@@ -12,7 +12,7 @@ class Board:
         self.food = [Food(f["x"], f["y"]) for f in board_data["food"]]
         self.width = board_data["width"]
         self.height = board_data["height"]
-        self.board = self._make_board()
+        self._make_board()
 
     def print_board(self):
         print("X" * (self.width + 2))
@@ -30,26 +30,28 @@ class Board:
         for food in self.food:
             board[food.y][food.x] = food
 
+        self.board = board
+        self._link_cells()
+
+    def _link_cells(self):
         for j in range(self.height):
             for i in range(self.width):
                 if j == 0:
-                    board[j][i].next["up"] = Wall(i, j - 1)
+                    self.board[j][i].next["up"] = Wall(i, j - 1)
                 else:
-                    board[j][i].next["up"] = board[j - 1][i]
+                    self.board[j][i].next["up"] = self.board[j - 1][i]
                 if j == self.height - 1:
-                    board[j][i].next["down"] = Wall(i, j + 1)
+                    self.board[j][i].next["down"] = Wall(i, j + 1)
                 else:
-                    board[j][i].next["down"] = board[j + 1][i]
+                    self.board[j][i].next["down"] = self.board[j + 1][i]
                 if i == 0:
-                    board[j][i].next["left"] = Wall(i - 1, j)
+                    self.board[j][i].next["left"] = Wall(i - 1, j)
                 else:
-                    board[j][i].next["left"] = board[j][i - 1]
+                    self.board[j][i].next["left"] = self.board[j][i - 1]
                 if i == self.width - 1:
-                    board[j][i].next["right"] = Wall(i + 1, j)
+                    self.board[j][i].next["right"] = Wall(i + 1, j)
                 else:
-                    board[j][i].next["right"] = board[j][i + 1]
-
-        return board
+                    self.board[j][i].next["right"] = self.board[j][i + 1]
 
 
 class Snake:
