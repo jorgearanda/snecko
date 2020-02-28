@@ -35,7 +35,7 @@ def ping():
 def start():
     data = bottle.request.json
     print(json.dumps(data))
-    color = "#00FF00"
+    color = "#AA2288"
 
     return start_response(color)
 
