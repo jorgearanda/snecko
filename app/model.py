@@ -37,7 +37,7 @@ class Game:
             print(f"Moving to first choice {move}")
         else:
             move = random.choice(second_choices)
-            print(f"Moving to second choicde {move}")
+            print(f"Moving to second choice {move}")
 
         return move
 
