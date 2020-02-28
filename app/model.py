@@ -16,7 +16,10 @@ class Game:
         for choice in {"up", "down", "left", "right"}:
             if self.board.your_head.next[choice].free:
                 for further in {"up", "down", "left", "right"}:
-                    if further == choice:
+                    if (
+                        self.board.your_head.next[choice].next[further]
+                        == self.board.your_head
+                    ):
                         continue
                     if not self.board.your_head.next[choice].next[further].free:
                         print(f"{choice} isn't great because {further} is not free")
